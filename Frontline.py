@@ -4,7 +4,7 @@ import random
 import os 
 
 WIDTH = 1000
-HEIGHT = 800 
+HEIGHT = 600 
 FPS = 60 
 
 #Colors 
@@ -15,17 +15,17 @@ BLACK = (0, 0 , 0)
 BLUE = (0, 0, 255)
 WHITE = (255, 255, 255)
 
-#Player 
+#Player, Sprite, Start position, background fade, Speed x,y
 class Player(pygame.sprite.Sprite):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
         self.image = pygame.image.load(os.path.join('img','jet.png')).convert()
         self.image.set_colorkey(WHITE)
         self.rect = self.image.get_rect()
-        self.rect.center = (200, HEIGHT / 2)
+        self.rect.center = (100, HEIGHT / 2)
         self.speedx = 0
         self.speedy = 0 
-
+    # Movements 
     def update(self):
         self.speedx = 0 
         self.speedy = 0 
@@ -39,10 +39,15 @@ class Player(pygame.sprite.Sprite):
         if keystate[pygame.K_DOWN]:
             self.speedy = 5 
         self.rect.x += self.speedx
+        self.rect.y += self.speedy
         if self.rect.right > WIDTH: 
             self.rect.right = WIDTH
         if self.rect.left < 0: 
             self.rect.left = 0
+        if self.rect.bottom > HEIGHT: 
+            self.rect.bottom = HEIGHT
+        if self.rect.top < 0: 
+            self.rect.top = 0
 
 
 #Pygame initialize, Music, Screen ratio, Title game, 
