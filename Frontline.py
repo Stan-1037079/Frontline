@@ -61,15 +61,15 @@ all_sprites = pygame.sprite.Group()
 player = Player()
 all_sprites.add(player)
 
-# Display title icon, Background
+# Display title icon, Background,Scale
 icon = pygame.image.load(os.path.join('img','jet.png')).convert()
 pygame.display.set_icon(icon)
 background = pygame.image.load(os.path.join('img','Background.jpg')).convert()
+background = pygame.transform.scale(background, (WIDTH, HEIGHT))
 
 #Game Loop, Running speed
 running = True
 while running:
-    screen.blit(background,(WIDTH,HEIGHT))
     clock.tick(FPS)
     # Process input (Events)
     for event in pygame.event.get(): 
@@ -80,8 +80,10 @@ while running:
     # Update 
     all_sprites.update()
     # Draw / Render
-    screen.fill(GREY)
+    #screen.fill(GREY)
+    screen.blit(background,(0,0))
     all_sprites.draw(screen)
-    pygame.display.flip()
+    pygame.display.update()
+    #pygame.display.flip()
 
 pygame.quit()
