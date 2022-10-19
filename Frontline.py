@@ -1,7 +1,7 @@
 #Frontline 
 import pygame
-import random 
-#import os import path
+import random
+import os 
 
 #img_dir = path.join(path.dirname(__file__),'img')
 
@@ -17,12 +17,14 @@ BLACK = (0, 0 , 0)
 BLUE = (0, 0, 255)
 WHITE = (255, 255, 255)
 
-
+#Player 
 class Player(pygame.sprite.Sprite):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
-        self.image = 
-        self.rect = 
+        self.image = pygame.image.load(os.path.join('img','jet.png')).convert()
+        self.rect = self.image.get_rect()
+        self.rect.center = (WIDTH / 2, HEIGHT / 2)
+
 
 #Pygame initialiser, Music, Screen ratio, Title game, 
 pygame.init()
@@ -33,13 +35,15 @@ clock = pygame.time.Clock
 
 all_sprites = pygame.sprite.Group()
 
-# Display title icon 
-#icon = pygame.image.load(path.join(img_dir,'jet.png'))
-#pygame.display.set_icon(icon)
+# Display title icon, Background
+icon = pygame.image.load(os.path.join('img','jet.png')).convert()
+pygame.display.set_icon(icon)
+background = pygame.image.load(os.path.join('img','Background.jpg')).convert()
 
 #Game Loop, Running speed
 running = True
 while running:
+    screen.blit(background,(WIDTH,HEIGHT))
     clock.tick(FPS)
     # Process input (Events)
     for event in pygame.event.get(): 
@@ -50,7 +54,7 @@ while running:
     # Update 
     all_sprites.update()
     # Draw / Render
-    screen.fill(GREY)
+    screen.fill()
     all_sprites.draw(screen)
     pygame.display.flip()
 
