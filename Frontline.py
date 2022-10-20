@@ -4,7 +4,7 @@ import random
 import os 
 
 WIDTH = 1000
-HEIGHT = 600 
+HEIGHT = 700 
 FPS = 60 
 
 #Colors 
@@ -49,6 +49,25 @@ class Player(pygame.sprite.Sprite):
         if self.rect.top < 0: 
             self.rect.top = 0
 
+class Enemy(pygame.sprite.Sprite):
+    def __init__(self):
+        pygame.sprite.Sprite.__init__(self)
+        self.image = pygame.image.load(os.path.join('img','helicopter.png')).convert()
+        self.image.set_colorkey(BLACK)
+        self.rect = self.image.get_rect()
+        self.rect.y = random.randrange(0, HEIGHT - self.rect.height)
+        self.rect.x = random.randrange(950, 1025)
+        self.speedy = random.randrange(-3,5)
+        self.speedx = random.randrange(-8,0)
+
+    def update(self):
+        self.rect.x += self.speedx 
+        self.rect.y += self.speedy 
+        if self.rect.top > HEIGHT + 10 or self.rect.left < -15 or self.rect.right > WIDTH + 20: 
+            self.rect.y = random.randrange(0, HEIGHT - self.rect.height)
+            self.rect.x = random.randrange(950, 1025)
+            self.speedy = random.randrange(-3,5)
+            self.speedx = random.randrange(-8,0)   
 
 #Pygame initialize, Music, Screen ratio, Title game, 
 pygame.init()
@@ -58,8 +77,13 @@ pygame.display.set_caption('Frontline')
 clock = pygame.time.Clock()
 
 all_sprites = pygame.sprite.Group()
+enemies = pygame.sprite.Group()
 player = Player()
 all_sprites.add(player)
+for i in range(12):
+    e = Enemy()
+    all_sprites.add(e)
+    enemies.add(e)
 
 # Display title icon, Background,Scale
 icon = pygame.image.load(os.path.join('img','jet.png')).convert()
