@@ -49,6 +49,11 @@ class Player(pygame.sprite.Sprite):
         if self.rect.top < 0: 
             self.rect.top = 0
 
+    def shoot(self):
+        bullet = Bullet(self.rect.centerx, self.rect.top)
+        all_sprites.add(bullet)
+        bullets.add(bullet)
+
 class Enemy(pygame.sprite.Sprite):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
@@ -69,6 +74,21 @@ class Enemy(pygame.sprite.Sprite):
             self.speedy = random.randrange(-3,5)
             self.speedx = random.randrange(-8,0)   
 
+class Bullet(pygame.sprite.Sprite):
+    def __init__(self, x, y):
+        pygame.sprite.Sprite.__init__(self)
+        self.image = pygame.image.load(os.path.join('img','bullet.png')).convert()
+        self.image.set_colorkey(BLACK)
+        self.rect = self.image.get_rect()
+        self.rect.bottom = y
+        self.rect.centerx = x
+        self.speedx = 10
+    
+    def update(self):
+        self.rect.x += self.speedx
+        if self.rect.right > WIDTH: 
+            self.kill
+
 #Pygame initialize, Music, Screen ratio, Title game, 
 pygame.init()
 pygame.mixer.init()
@@ -76,10 +96,14 @@ screen = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption('Frontline')
 clock = pygame.time.Clock()
 
+#Sprite groups 
 all_sprites = pygame.sprite.Group()
 enemies = pygame.sprite.Group()
-player = Player()
+player = Player() 
+bullets = pygame.sprite.Group()
 all_sprites.add(player)
+
+# Spawn Enemies 
 for i in range(12):
     e = Enemy()
     all_sprites.add(e)
@@ -99,10 +123,25 @@ while running:
     for event in pygame.event.get(): 
         if event.type == pygame.QUIT:
             running = False
+        elif event.type == pygame.KEYDOWN: 
+            if event.key == pygame.K_SPACE:
+                player.shoot()
     
     # Process input (Events)
     # Update 
     all_sprites.update()
+
+    #Collision Enemy, Bullets
+    hits = pygame.sprite.groupcollide(enemies, bullets, True, True)
+    for hit in hits: 
+        e = Enemy()
+        all_sprites.add(e)
+        enemies.add(e)
+        
+    hits = pygame.sprite.spritecollide(player, enemies, False)
+    if hits: 
+        running = False
+
     # Draw / Render
     #screen.fill(GREY)
     screen.blit(background,(0,0))
