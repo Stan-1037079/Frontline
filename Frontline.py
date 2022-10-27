@@ -53,6 +53,7 @@ class Player(pygame.sprite.Sprite):
         bullet = Bullet(self.rect.centerx, self.rect.top)
         all_sprites.add(bullet)
         bullets.add(bullet)
+        bullet_sound.play()
 
 class Enemy(pygame.sprite.Sprite):
     def __init__(self):
@@ -96,6 +97,14 @@ screen = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption('Frontline')
 clock = pygame.time.Clock()
 
+#Background music and sounds 
+pygame.mixer.music.load(os.path.join('sound','Front line.mp3'))
+pygame.mixer.music.set_volume(0.5)
+pygame.mixer.music.play()
+
+bullet_sound = pygame.mixer.Sound(os.path.join('sound','bullet.mp3'))
+explosion_sound = pygame.mixer.Sound(os.path.join('sound','explosion.wav'))
+
 #Sprite groups 
 all_sprites = pygame.sprite.Group()
 enemies = pygame.sprite.Group()
@@ -137,6 +146,7 @@ while running:
         e = Enemy()
         all_sprites.add(e)
         enemies.add(e)
+        explosion_sound.play()
         
     hits = pygame.sprite.spritecollide(player, enemies, False)
     if hits: 
