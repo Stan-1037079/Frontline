@@ -105,6 +105,18 @@ pygame.mixer.music.play()
 bullet_sound = pygame.mixer.Sound(os.path.join('sound','bullet.mp3'))
 explosion_sound = pygame.mixer.Sound(os.path.join('sound','explosion.wav'))
 
+# Score variable 
+score = 0
+
+#Draw text on screen + font used 
+font_name = pygame.font.match_font('Times')
+def draw_text(surf, text, size, x, y):
+    font = pygame.font.Font(font_name, size)
+    text_surface = font.render(text, True, BLACK)
+    text_rect = text_surface.get_rect()
+    text_rect.midtop = (x, y)
+    surf.blit(text_surface, text_rect)
+
 #Sprite groups 
 all_sprites = pygame.sprite.Group()
 enemies = pygame.sprite.Group()
@@ -143,6 +155,7 @@ while running:
     #Collision Enemy, Bullets
     hits = pygame.sprite.groupcollide(enemies, bullets, True, True)
     for hit in hits: 
+        score += 100
         e = Enemy()
         all_sprites.add(e)
         enemies.add(e)
@@ -156,6 +169,7 @@ while running:
     #screen.fill(GREY)
     screen.blit(background,(0,0))
     all_sprites.draw(screen)
+    draw_text(screen, str(score), 18, WIDTH / 2, 10)
     pygame.display.update()
     #pygame.display.flip()
 
